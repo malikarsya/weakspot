@@ -1,4 +1,5 @@
 import math
+
 def main():
     while True:
         password = input("What's your password? ")
@@ -8,8 +9,6 @@ def main():
                 print("Spaces are not allowed.")
             else:
                 break
-    
-
 
 def calculate_entropy(pass_list):
     count = 0
@@ -23,15 +22,53 @@ def calculate_entropy(pass_list):
         else:
             entropy += 32
 
-    total = float(len(pass_list) + math.log(entropy,2))
-    return total
+    bit = float(int(len(pass_list)) * math.log(entropy,2))
+    return bit
+
+def common_password(password):
+    with open("100k-most-used-passwords-NCSC.txt","r") as file:
+        for passes in file:
+            if passes.rstrip() == password:
+                return("Password is common.")
+    return True
+
+def sequential_number(pass_list):
+    nums = [0,1,2,3,4,5,6,7,8,9]
+    max_sequential_order = 3
+    count = 0
+    i = 0
+    while i < len(pass_list):
+        if pass_list[i] in str(nums):
+            j = i
+            if pass_list[j+1] == pass_list[j] + 1:
+                while j < j + 4:
+                    if pass_list[j+1] == pass_list[j] + 1:
+                        j += 1
+                        count += 1
+                    else:
+                        j = 0
+                        i += 1
+                        break
+            
+            elif pass_list[j+1] == pass_list[j] - 1:
+                while j < j + 4:
+                    if pass_list[j+1] == pass_list[j] - 1:
+                        j += 1
+                        count += 1
+                    else:
+                        j = 0
+                        i += 1
+                        break
+        else:
+            i += 1
+    if count >= max_sequential_order:
+        return("Password is sequential.")
+    else:
+        return("Password udah aman")
+        
 
 
-def weak_pattern(password):
-    with open("100k-most-used-passwords-NCSC.txt") as file:
-        for i in file:
-            if password
 
-
+   
 if __name__ == "__main__":
     main()
